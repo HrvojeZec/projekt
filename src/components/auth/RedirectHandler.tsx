@@ -1,5 +1,5 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { UserRole } from "../../types/auth";
 
@@ -11,8 +11,12 @@ export const RedirectHandler: React.FC<RedirectHandlerProps> = ({
   children,
 }) => {
   const { user } = useAuth();
+  const location = useLocation();
+  // Dodaj OVU JEDNU LINIJU:
+  const isAuthRoute = /^\/auth\//.test(location.pathname);
 
-  if (user) {
+  // I izmijeni IF:
+  if (user && !isAuthRoute) {
     // Redirect authenticated users based on role
     const roleRedirects: Record<UserRole, string> = {
       [UserRole.SUPER_ADMIN]: "/super-admin/dashboard",
